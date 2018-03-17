@@ -21,7 +21,7 @@ namespace Microwave.Test.Integration
         private IDisplay _display;
         private IButton _timeButton;
         private IButton _powerButton;
-        private IButton _cancelButton;
+        private IButton _startCancelButton;
         private IUserInterface _userInterface;
         [SetUp]
         public void SetUp()
@@ -32,10 +32,10 @@ namespace Microwave.Test.Integration
             _display = Substitute.For<IDisplay>();
             _timeButton = new Button();
             _powerButton = new Button();
-            _cancelButton = new Button();
-            _userInterface = new UserInterface(_powerButton,_timeButton,_cancelButton,_door,_display,_light,_cookController);
+            _startCancelButton = new Button();
+            _userInterface = new UserInterface(_powerButton,_timeButton,_startCancelButton,_door,_display,_light,_cookController);
         }
-
+        
         [Test]
         public void PowerPressed_UICallsShowPower50InDisplay()
         {
@@ -53,11 +53,56 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void PowerPressed_UICallsShowPowerInDisplay()
+        public void TimePressed_UICallsShowTime1minInDisplay()
+        {
+
+            _powerButton.Press();
+            _timeButton.Press();
+
+            _display.Received().ShowTime(1,0);
+        }
+
+        [Test]
+        public void TimePressedTwice_UICallsShowTime2minInDisplay()
         {
             _powerButton.Press();
+            _timeButton.Press();
+            _timeButton.Press();
 
-            _display.Received().ShowPower(50);
+            _display.Received().ShowTime(2, 0);
+        }
+
+        [Test]
+        public void StartCancelPressedAfterSetUp_CookingSequenceStarted()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            Received.InOrder(() =>
+            {
+                _light.TurnOn();
+                _cookController.StartCooking(50,60);
+            });
+
+        }
+
+        [Test]
+        public void StartCancelPressedTwiceAfterSetUp_CookingSequenceStartedAndStopped()
+        {
+            _powerButton.Press();
+            
+            _timeButton.Press();
+            _startCancelButton.Press();
+            _startCancelButton.Press();
+
+            Received.InOrder(() =>
+            {
+                _cookController.Stop();
+                _light.TurnOff();
+                _display.Clear();
+            });
+
         }
     }
 }
