@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Integration
 {
-    class MicrowaveIntegrationTest5
+    class MicrowaveIntegrationTest6
     {
         private IOutput _output;
         private IDoor _door;
@@ -42,35 +42,21 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void StartCancelPressedAfterSetup_OutputLineIsCalled()
+        public void DoorOpenedWhileCooking_OutputLineIsCalled()
         {
             _powerButton.Press();
             _timeButton.Press();
             _startCancelButton.Press();
-            Received.InOrder(() =>
-            {
-                _output.Received().OutputLine("Display shows: 50 W");
-                _output.Received().OutputLine("Display shows: 01:00");
-                _output.Received().OutputLine("PowerTube works with 50 %");
-            });
-        }
-
-        [Test]
-        public void StartCancelPressedWhileCooking_OutputLineIsCalled()
-        {
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-            _startCancelButton.Press();
+            _door.Open();
             Received.InOrder(() =>
             {
                 _output.Received().OutputLine("Display shows: 50 W");
                 _output.Received().OutputLine("Display shows: 01:00");
                 _output.Received().OutputLine("PowerTube works with 50 %");
                 _output.Received().OutputLine("PowerTube turned off");
-                _output.Received().OutputLine("Light is turned off");
                 _output.Received().OutputLine("Display cleared");
             });
         }
+
     }
 }
