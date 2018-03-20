@@ -88,6 +88,16 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
+        public void PowerPressed_ThenCancelPressed_UIClearsDisplay()
+        {
+            _powerButton.Press();
+
+            _startCancelButton.Press();
+
+            _display.Received().Clear();
+        }
+
+        [Test]
         public void StartCancelPressedTwiceAfterSetUp_CookingSequenceStartedAndStopped()
         {
             _powerButton.Press();
