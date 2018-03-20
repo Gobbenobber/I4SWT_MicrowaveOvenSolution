@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MicrowaveOvenClasses.Boundary;
 using MicrowaveOvenClasses.Controllers;
 using MicrowaveOvenClasses.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using Timer = MicrowaveOvenClasses.Boundary.Timer;
 
 namespace Microwave.Test.Integration
 {
@@ -49,9 +51,9 @@ namespace Microwave.Test.Integration
             _startCancelButton.Press();
             Received.InOrder(() =>
             {
-                _output.Received().OutputLine("Display shows: 50 W");
-                _output.Received().OutputLine("Display shows: 01:00");
-                _output.Received().OutputLine("PowerTube works with 50 %");
+                _output.OutputLine("Display shows: 50 W");
+                _output.OutputLine("Display shows: 01:00");
+                _output.OutputLine("PowerTube works with 50 %");
             });
         }
 
@@ -64,12 +66,12 @@ namespace Microwave.Test.Integration
             _startCancelButton.Press();
             Received.InOrder(() =>
             {
-                _output.Received().OutputLine("Display shows: 50 W");
-                _output.Received().OutputLine("Display shows: 01:00");
-                _output.Received().OutputLine("PowerTube works with 50 %");
-                _output.Received().OutputLine("PowerTube turned off");
-                _output.Received().OutputLine("Light is turned off");
-                _output.Received().OutputLine("Display cleared");
+                _output.OutputLine("Display shows: 50 W");
+                _output.OutputLine("Display shows: 01:00");
+                _output.OutputLine("PowerTube works with 50 %");
+                _output.OutputLine("PowerTube turned off");
+                _output.OutputLine("Light is turned off");
+                _output.OutputLine("Display cleared");
             });
         }
     }

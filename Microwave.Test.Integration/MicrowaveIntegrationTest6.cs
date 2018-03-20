@@ -58,5 +58,26 @@ namespace Microwave.Test.Integration
             });
         }
 
+        [Test]
+        public void DoorOpened_OutputLineIsCalled()
+        {
+            _door.Open();
+            _output.Received().OutputLine("Light is turned on");
+        }
+
+        [Test]
+        public void DoorOpenedThenClosed_OutputLineIsCalled()
+        {
+            _door.Open();
+            _door.Close();
+
+            Received.InOrder(() =>
+            {
+                _output.OutputLine("Light is turned on");
+                _output.OutputLine("Light is turned off");
+            });
+            
+        }
+
     }
 }

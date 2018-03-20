@@ -81,8 +81,8 @@ namespace Microwave.Test.Integration
             _uut.Open();
             Received.InOrder(() =>
                 {
-                    _display.Clear();
                     _light.TurnOn();
+                    _display.Clear();
                 }
             );
         }
