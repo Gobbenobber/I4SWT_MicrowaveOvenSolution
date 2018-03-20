@@ -53,11 +53,13 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void PowerPressed_UICallsShowPowerInDisplay()
+        public void PowerPressed_ThenCancelPressed_UIClearsDisplay()
         {
             _powerButton.Press();
 
-            _display.Received().ShowPower(50);
+            _cancelButton.Press();
+
+            _display.Received().Clear();
         }
     }
 }
