@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MicrowaveOvenClasses.Boundary;
 using MicrowaveOvenClasses.Controllers;
@@ -37,7 +38,6 @@ namespace Microwave.Test.Integration
             _powerButton = new Button();        //Buttons can be included; assumed unit tested prior to integration test.
             _startCancelButton = new Button();
             _powerTube = Substitute.For<IPowerTube>();
-            _output = Substitute.For<IOutput>();
             _timer = Substitute.For<ITimer>();
             _uut = new CookController(_timer,_display,_powerTube);
             _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _uut);
@@ -45,6 +45,38 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void 
+        public void StartCancelPressedAfterSetUp_CookControllerStartsCooking()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            Received.InOrder(() =>
+            {
+                //_display.ShowTime(1, 0); //<-- Previously tested
+                //_light.TurnOn();
+                _powerTube.TurnOn(50);
+                _timer.Start(60);
+            });
+        }
+
+        [Test]
+        public void StartCancelPressedWhileCookinng_CookControllerStopsCooking()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            _startCancelButton.Press();
+            Received.InOrder(() =>
+            {
+                //_display.ShowTime(1, 0); //<-- Previously tested
+                //_light.TurnOn();
+                _powerTube.TurnOn(50);
+                _timer.Start(60);
+                _powerTube.TurnOff();
+                _timer.Stop();
+                //_light.TurnOff();
+                //_display.Clear();
+            });
+        }
     }
 }
