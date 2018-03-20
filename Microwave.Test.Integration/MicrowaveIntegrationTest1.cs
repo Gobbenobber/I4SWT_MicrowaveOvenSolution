@@ -45,14 +45,6 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
-        public void PowerPressedTwice_UICallsShowPower100InDisplay()
-        {
-            _powerButton.Press();
-            _powerButton.Press();
-            _display.Received().ShowPower(100);
-        }
-
-        [Test]
         public void TimePressed_UICallsShowTime1minInDisplay()
         {
 
@@ -60,16 +52,6 @@ namespace Microwave.Test.Integration
             _timeButton.Press();
 
             _display.Received().ShowTime(1,0);
-        }
-
-        [Test]
-        public void TimePressedTwice_UICallsShowTime2minInDisplay()
-        {
-            _powerButton.Press();
-            _timeButton.Press();
-            _timeButton.Press();
-
-            _display.Received().ShowTime(2, 0);
         }
 
         [Test]
