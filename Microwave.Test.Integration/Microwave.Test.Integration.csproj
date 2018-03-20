@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="MicrowaveIntegrationTest1.cs" />
     <Compile Include="MicrowaveIntegrationTest2.cs" />
+    <Compile Include="MicrowaveIntegrationTest3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

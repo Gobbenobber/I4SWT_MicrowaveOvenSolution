@@ -21,7 +21,7 @@ namespace Microwave.Test.Integration
         private IDisplay _display;
         private IButton _timeButton;
         private IButton _powerButton;
-        private IButton _cancelButton;
+        private IButton _startCancelButton;
         private IUserInterface _userInterface;
 
         [SetUp]
@@ -33,8 +33,8 @@ namespace Microwave.Test.Integration
             _display = Substitute.For<IDisplay>();
             _timeButton = new Button();
             _powerButton = new Button();        //Buttons can be included; assumed unit tested prior to integration test.
-            _cancelButton = new Button();
-            _userInterface = new UserInterface(_powerButton,_timeButton,_cancelButton,_uut,_display,_light,_cookController);
+            _startCancelButton = new Button();
+            _userInterface = new UserInterface(_powerButton,_timeButton,_startCancelButton,_uut,_display,_light,_cookController);
         }
 
         [Test]
@@ -57,11 +57,34 @@ namespace Microwave.Test.Integration
             
         }
 
-        public void DoorOpenedWhileCooking_StopIsCalledOnCookController()
+        [Test]
+        public void DoorOpenedWhileCooking_StopCookControllerDisplayCleared()
         {
             _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            _uut.Open();
+
+            Received.InOrder(() =>
+            {
+                _cookController.Stop();
+                _display.Clear();
+            });
+
+        }
+
+        [Test]
+        public void DoorOpenedDuringSetup_DisplayClearedLightTurnedOn()
+        {
             _powerButton.Press();
-            
+            _timeButton.Press();
+            _uut.Open();
+            Received.InOrder(() =>
+                {
+                    _display.Clear();
+                    _light.TurnOn();
+                }
+            );
         }
 
     }
