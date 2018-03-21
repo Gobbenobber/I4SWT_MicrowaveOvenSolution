@@ -50,10 +50,20 @@ namespace Microwave.Test.Integration
             _door.Open();
             Received.InOrder(() =>
             {
-                _powerTube.TurnOn(50);
-                _timer.Start(60);
                 _powerTube.TurnOff();
                 _timer.Stop();
+            });
+        }
+
+        [Test]
+        public void DoorOpenedDuringSetUp_DisplayCleared_LightTurnsOn()
+        {
+            _powerButton.Press();
+            _door.Open();
+            Received.InOrder(() =>
+            {
+                _light.TurnOn();
+                _display.Clear();
             });
         }
     }

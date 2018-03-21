@@ -51,11 +51,17 @@ namespace Microwave.Test.Integration
             _startCancelButton.Press();
             Received.InOrder(() =>
             {
-                //_display.ShowTime(1, 0); //<-- Previously tested
-                //_light.TurnOn();
-                _powerTube.TurnOn(50);
                 _timer.Start(60);
+                _powerTube.TurnOn(50);
             });
+        }
+
+        [Test]
+        public void StartCancelPressedDuringSetUp_DisplayIsCleared()
+        {
+            _powerButton.Press();
+            _startCancelButton.Press();
+            _display.Received().Clear();
         }
 
         [Test]
@@ -67,14 +73,10 @@ namespace Microwave.Test.Integration
             _startCancelButton.Press();
             Received.InOrder(() =>
             {
-                //_display.ShowTime(1, 0); //<-- Previously tested
-                //_light.TurnOn();
-                _powerTube.TurnOn(50);
                 _timer.Start(60);
+                _powerTube.TurnOn(50);
                 _powerTube.TurnOff();
                 _timer.Stop();
-                //_light.TurnOff();
-                //_display.Clear();
             });
         }
     }

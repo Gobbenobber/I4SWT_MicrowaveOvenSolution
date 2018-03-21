@@ -17,7 +17,7 @@ namespace Microwave.Test.Integration
     {
         private IOutput _output;
         private IDoor _door;
-        private ICookController _cookController;
+        private CookController _cookController;
         private ILight _light;
         private IPowerTube _powerTube;
         private IDisplay _display;
@@ -41,6 +41,7 @@ namespace Microwave.Test.Integration
             _timer = new Timer();
             _cookController = new CookController(_timer, _display, _powerTube);
             _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
+            _cookController.UI = _userInterface;
         }
 
         [Test]
@@ -73,6 +74,33 @@ namespace Microwave.Test.Integration
                 _output.OutputLine("Light is turned off");
                 _output.OutputLine("Display cleared");
             });
+        }
+
+        /// <summary>
+        /// This test also discovered an error in Timer.cs, line 46 (TimeRemaining must be -1, not -1000)
+        /// </summary>
+
+        [Test]
+        public void StartCancelPressedAfterSetup_OutputCalledAfter1Min()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            Thread.Sleep(61000); //sleep 61 secs
+            Received.InOrder(() =>
+            {
+                _output.OutputLine("PowerTube turned off");
+                _output.OutputLine("Display cleared");
+                _output.OutputLine("Light is turned off");
+            });
+        }
+        
+        [Test]
+        public void StartCancelPressedDuringSetup_OutputCalledFromDisplay()
+        {
+            _powerButton.Press();
+            _startCancelButton.Press();
+            _output.Received().OutputLine("Display cleared");
         }
     }
 }

@@ -16,18 +16,6 @@ namespace Microwave.Application
 {
     class Program
     {
-        //public static void Menu()
-        //{
-        //    Console.WriteLine("\t\tMicrowave oven");
-        //    Console.WriteLine();
-        //    Console.WriteLine("<P>. \tPower button");
-        //    Console.WriteLine("<T>. \tDelete a team");
-        //    Console.WriteLine("<S>. \tStart/Cancel button");
-        //    Console.WriteLine("<D>. \tOpen door");
-        //}
-
-        private static IUserInterface ui;
-
         static void Main(string[] args)
         {
             
@@ -41,32 +29,48 @@ namespace Microwave.Application
             var _display = new Display(_output);
             var _light = new Light(_output);
             var _timer = new Timer();
-            var _cookController = new CookController(_timer, _display, _powerTube,ui);
-            ui = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
+            var _cookController = new CookController(_timer, _display, _powerTube);
+            _cookController.UI = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
 
 
             Console.WriteLine("=============IT7===========");
             Console.WriteLine("=============Testíng normal use case===========");
-            //_door.Open();
-            //_door.Close();
-            //_powerButton.Press();
-            //_timeButton.Press();
-            //_startCancelButton.Press();
-            //Thread.Sleep(61000);
-            Console.WriteLine("=============Testíng cancelled use case===========");
+            _door.Open();
+            _door.Close();
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            Thread.Sleep(62000);
+
+            Console.WriteLine("=============Testíng StartCancelPressed while cooking===========");
             _door.Open();
             _door.Close();
             _powerButton.Press();
             _timeButton.Press();
             _startCancelButton.Press();
             _startCancelButton.Press();
+
+            Console.WriteLine("=============Testíng StartCancelPressed during setup===========");
+            _door.Open();
+            _door.Close();
+            _powerButton.Press();
+            _startCancelButton.Press();
+
             Console.WriteLine("=============IT8===========");
+            Console.WriteLine("=============DoorOpenedWhileCooking===========");
             _door.Open();
             _door.Close();
             _powerButton.Press();
             _timeButton.Press();
             _startCancelButton.Press();
-            _door.Open();            
+            Thread.Sleep(10000);
+            _door.Open();
+
+            Console.WriteLine("=============DoorOpenedDuringSetup===========");
+            _door.Open();
+            _door.Close();
+            _powerButton.Press();
+            _door.Open();
 
             // Wait while the classes, including the timer, do their job
             System.Console.WriteLine("Tast enter når applikationen skal afsluttes");

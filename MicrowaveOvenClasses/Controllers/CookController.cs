@@ -39,8 +39,8 @@ namespace MicrowaveOvenClasses.Controllers
 
         public void StartCooking(int power, int time)
         {
+            myTimer.Start(time);        // Swapped this line with the one below
             myPowerTube.TurnOn(power);
-            myTimer.Start(time);
             isCooking = true;
         }
 

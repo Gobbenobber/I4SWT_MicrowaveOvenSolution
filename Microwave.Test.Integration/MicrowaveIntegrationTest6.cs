@@ -79,5 +79,16 @@ namespace Microwave.Test.Integration
             
         }
 
+        [Test]
+        public void DoorOpenedDuringSetUp_OutputIsCalledFromDisplayAndLight()
+        {
+            _powerButton.Press();
+            _door.Open();
+            Received.InOrder(() =>
+            {
+                _output.OutputLine("Light is turned on");
+                _output.OutputLine("Display cleared");
+            });
+        }
     }
 }
