@@ -47,12 +47,12 @@ namespace Microwave.Application
 
             Console.WriteLine("=============IT7===========");
             Console.WriteLine("=============Testíng normal use case===========");
-            _door.Open();
-            _door.Close();
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-            Thread.Sleep(61000);
+            //_door.Open();
+            //_door.Close();
+            //_powerButton.Press();
+            //_timeButton.Press();
+            //_startCancelButton.Press();
+            //Thread.Sleep(61000);
             Console.WriteLine("=============Testíng cancelled use case===========");
             _door.Open();
             _door.Close();
@@ -66,7 +66,7 @@ namespace Microwave.Application
             _powerButton.Press();
             _timeButton.Press();
             _startCancelButton.Press();
-            Thread.Sleep(61000);
+            _door.Open();            
 
             // Wait while the classes, including the timer, do their job
             System.Console.WriteLine("Tast enter når applikationen skal afsluttes");
